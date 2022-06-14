@@ -1,0 +1,5 @@
+### Executáveis ###
+*.exe
+
+### VS Code ###
+.vscode/
