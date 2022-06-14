@@ -25,5 +25,6 @@ func Connect(connectionString string) {
 func Migrate() {
 	Instance.AutoMigrate(&entities.Postagem{})
 	Instance.AutoMigrate(&entities.Tema{})
+	Instance.AutoMigrate(&entities.Usuario{})
 	log.Println("Criação das Tabelas Finalizada...")
 }
