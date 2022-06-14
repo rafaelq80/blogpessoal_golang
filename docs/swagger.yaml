@@ -1,0 +1,410 @@
+basePath: /
+definitions:
+  controllers.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  entities.Postagem:
+    properties:
+      data:
+        example: "2022-04-09T21:21:46+00:00"
+        type: string
+      id:
+        example: 1
+        type: integer
+      tema:
+        $ref: '#/definitions/entities.Tema'
+      tema_id:
+        example: 1
+        type: integer
+      texto:
+        example: Texto da primeira postagem
+        maxLength: 1000
+        minLength: 10
+        type: string
+      titulo:
+        example: Minha primeira postagem
+        maxLength: 100
+        minLength: 5
+        type: string
+    required:
+    - tema_id
+    - texto
+    - titulo
+    type: object
+  entities.Tema:
+    properties:
+      descricao:
+        type: string
+      id:
+        type: integer
+      postagens:
+        items:
+          $ref: '#/definitions/entities.Postagem'
+        type: array
+    required:
+    - descricao
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: rafaelproinfo@gmail.com
+    name: Rafael Queiróz
+    url: https://github.com/rafaelq80
+  description: Projeto Blog Pessoal
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Blog Pessoal
+  version: "1.0"
+paths:
+  /postagens:
+    get:
+      consumes:
+      - application/json
+      description: Lista todas as Postagens
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Postagem'
+            type: array
+      summary: Listar Postagens
+      tags:
+      - postagens
+    post:
+      consumes:
+      - application/json
+      description: Cria uma nova Postagem
+      parameters:
+      - description: Criar Postagem
+        in: body
+        name: postagem
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Postagem'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.Postagem'
+      summary: Criar Postagem
+      tags:
+      - postagens
+  /postagens/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Apaga uma Postagem
+      parameters:
+      - description: Id da Postagem
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Deletar Postagem
+      tags:
+      - postagens
+    get:
+      consumes:
+      - application/json
+      description: Lista uma Postagem por id
+      parameters:
+      - description: Id da Postagem
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Postagem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Listar Postagem por id
+      tags:
+      - postagens
+    put:
+      consumes:
+      - application/json
+      description: Edita uma Postagem
+      parameters:
+      - description: Id da Postagem
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Atualizar Postagem
+        in: body
+        name: postagem
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Postagem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Postagem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Atualizar Postagem
+      tags:
+      - postagens
+  /postagens/titulo/{titulo}:
+    get:
+      consumes:
+      - application/json
+      description: Lista todas as Postagem por título
+      parameters:
+      - description: Título da Postagem
+        in: path
+        name: titulo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Postagem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Listar Postagens por título
+      tags:
+      - postagens
+  /temas:
+    get:
+      consumes:
+      - application/json
+      description: Lista todos os Temas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Tema'
+            type: array
+      summary: Listar Temas
+      tags:
+      - temas
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo Tema
+      parameters:
+      - description: Criar Tema
+        in: body
+        name: tema
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Tema'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.Tema'
+      summary: Criar Tema
+      tags:
+      - temas
+  /temas/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Apaga uma Tema
+      parameters:
+      - description: Id do Tema
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Deletar Tema
+      tags:
+      - temas
+    get:
+      consumes:
+      - application/json
+      description: Lista um Tema por id
+      parameters:
+      - description: Id do Tema
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Tema'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Listar Tema por id
+      tags:
+      - temas
+    put:
+      consumes:
+      - application/json
+      description: Edita um Tema
+      parameters:
+      - description: Id do tema
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Atualizar Tema
+        in: body
+        name: Tema
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Tema'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Tema'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Atualizar Tema
+      tags:
+      - temas
+  /temas/descricao/{descricao}:
+    get:
+      consumes:
+      - application/json
+      description: Lista todos os Temas por descrição
+      parameters:
+      - description: Descrição do Tema
+        in: path
+        name: descricao
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Tema'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Listar Temas por descrição
+      tags:
+      - temas
+swagger: "2.0"

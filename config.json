@@ -1,0 +1,4 @@
+{
+    "connection_string": "root:root@tcp(127.0.0.1:3306)/db_blogpessoal_go?parseTime=true&charset=utf8mb4&loc=Local",
+    "port": 8080
+}
