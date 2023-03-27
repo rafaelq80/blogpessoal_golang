@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // getAll godoc
@@ -43,20 +44,20 @@ func GetUsuarios(w http.ResponseWriter, r *http.Request) {
 // @Router /usuarios/{id} [get]
 func GetUsuarioById(w http.ResponseWriter, r *http.Request) {
 
-	temaId := mux.Vars(r)["id"]
+	usuarioId := mux.Vars(r)["id"]
 
-	if !checkIfUsuarioExists(temaId) {
+	if !checkIfUsuarioExists(usuarioId) {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode("Usuario Não Encontrada!")
 		return
 	}
 
-	var tema entities.Usuario
+	var usuario entities.Usuario
 
-	database.Instance.Preload("Postagens").First(&tema, temaId)
+	database.Instance.Preload("Postagens").First(&usuario, usuarioId)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(tema)
+	json.NewEncoder(w).Encode(usuario)
 }
 
 // postUsuario godoc
@@ -65,17 +66,17 @@ func GetUsuarioById(w http.ResponseWriter, r *http.Request) {
 // @Tags usuarios
 // @Accept  json
 // @Produce  json
-// @Param tema body entities.Usuario true "Criar Usuario"
+// @Param usuario body entities.Usuario true "Criar Usuario"
 // @Success 201 {object} entities.Usuario
 // @Router /usuarios [post]
 func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var tema entities.Usuario
-	json.NewDecoder(r.Body).Decode(&tema)
+	var usuario entities.Usuario
+	json.NewDecoder(r.Body).Decode(&usuario)
 
 	validate := validator.New()
 
-	err := validate.Struct(tema)
+	err := validate.Struct(usuario)
 	if err != nil {
 		validationErrors := err.(validator.ValidationErrors)
 		w.Header().Add("Content-Type", "application/json")
@@ -87,9 +88,12 @@ func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	database.Instance.Create(&tema)
+	hash,_ := HashPassword(usuario.Senha)
+	usuario.Senha = hash
+
+	database.Instance.Create(&usuario)
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(tema)
+	json.NewEncoder(w).Encode(usuario)
 }
 
 // putUsuario godoc
@@ -98,7 +102,7 @@ func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 // @Tags usuarios
 // @Accept  json
 // @Produce  json
-// @Param id path string true "Id do tema"
+// @Param id path string true "Id do usuario"
 // @Param Usuario body entities.Usuario true "Atualizar Usuario"
 // @Success 200 {object} entities.Usuario
 // @Success 400 {object} errorResponse
@@ -107,22 +111,22 @@ func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 // @Router /usuarios/{id} [put]
 func UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 
-	temaId := mux.Vars(r)["id"]
+	usuarioId := mux.Vars(r)["id"]
 
-	if !checkIfUsuarioExists(temaId) {
+	if !checkIfUsuarioExists(usuarioId) {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode("Usuario Não Encontrado!")
 		return
 	}
 
-	var tema entities.Usuario
+	var usuario entities.Usuario
 
-	database.Instance.First(&tema, temaId)
-	json.NewDecoder(r.Body).Decode(&tema)
+	database.Instance.First(&usuario, usuarioId)
+	json.NewDecoder(r.Body).Decode(&usuario)
 	
 	validate := validator.New()
 
-	err := validate.Struct(tema)
+	err := validate.Struct(usuario)
 	if err != nil {
 		validationErrors := err.(validator.ValidationErrors)
 		w.Header().Add("Content-Type", "application/json")
@@ -134,17 +138,30 @@ func UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	database.Instance.Save(&tema)
+	hash,_ := HashPassword(usuario.Senha)
+	usuario.Senha = hash
+	
+	database.Instance.Save(&usuario)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(tema)
+	json.NewEncoder(w).Encode(usuario)
 }
 
-func checkIfUsuarioExists(temaId string) bool {
+func checkIfUsuarioExists(usuarioId string) bool {
 
-	var tema entities.Usuario
-	database.Instance.First(&tema, temaId)
+	var usuario entities.Usuario
+	database.Instance.First(&usuario, usuarioId)
 
-	return tema.ID != 0 
+	return usuario.ID != 0 
 
+}
+
+func HashPassword(password string) (string, error) {
+    bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+    return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
 }

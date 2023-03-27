@@ -71,10 +71,10 @@ func RegisterTemaRoutes(router *mux.Router) {
 }
 
 func RegisterUsuarioRoutes(router *mux.Router) {
-	router.HandleFunc("/usuarios", controllers.GetUsuarios).Methods("GET")
-	router.HandleFunc("/usuarios", controllers.CreateUsuario).Methods("POST")
+	router.HandleFunc("/usuarios/all", controllers.GetUsuarios).Methods("GET")
+	router.HandleFunc("/usuarios/cadastrar", controllers.CreateUsuario).Methods("POST")
 	router.HandleFunc("/usuarios/{id}", controllers.GetUsuarioById).Methods("GET")
-	router.HandleFunc("/usuarios/{id}", controllers.UpdateUsuario).Methods("PUT")
+	router.HandleFunc("/usuarios/atualizar/{id}", controllers.UpdateUsuario).Methods("PUT")
 }
 
 func RegisterSwaggerRoutes(router *mux.Router) {
