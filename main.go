@@ -43,6 +43,7 @@ func main() {
 	// Register Routes
 	RegisterPostagemRoutes(router)
 	RegisterTemaRoutes(router)
+	RegisterUsuarioRoutes(router)
 	RegisterSwaggerRoutes(router)
 	//handler := cors.Default().Handler(router)
 
@@ -67,6 +68,13 @@ func RegisterTemaRoutes(router *mux.Router) {
 	router.HandleFunc("/temas/descricao/{descricao}", controllers.GetTemaByDescricao).Methods("GET")
 	router.HandleFunc("/temas/{id}", controllers.UpdateTema).Methods("PUT")
 	router.HandleFunc("/temas/{id}", controllers.DeleteTema).Methods("DELETE")
+}
+
+func RegisterUsuarioRoutes(router *mux.Router) {
+	router.HandleFunc("/usuarios", controllers.GetUsuarios).Methods("GET")
+	router.HandleFunc("/usuarios", controllers.CreateUsuario).Methods("POST")
+	router.HandleFunc("/usuarios/{id}", controllers.GetUsuarioById).Methods("GET")
+	router.HandleFunc("/usuarios/{id}", controllers.UpdateUsuario).Methods("PUT")
 }
 
 func RegisterSwaggerRoutes(router *mux.Router) {
