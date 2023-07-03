@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -127,22 +128,12 @@ func CreateTema(w http.ResponseWriter, r *http.Request) {
 // @Success 400 {object} errorResponse
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
-// @Router /temas/{id} [put]
+// @Router /temas [put]
 func UpdateTema(w http.ResponseWriter, r *http.Request) {
 
-	temaId := mux.Vars(r)["id"]
-
-	if !checkIfTemaExists(temaId) {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode("Tema Não Encontrado!")
-		return
-	}
-
 	var tema model.Tema
-
-	database.Instance.First(&tema, temaId)
 	json.NewDecoder(r.Body).Decode(&tema)
-
+	
 	validate := validator.New()
 
 	err := validate.Struct(tema)
@@ -154,6 +145,14 @@ func UpdateTema(w http.ResponseWriter, r *http.Request) {
 		if err := json.NewEncoder(w).Encode(responseBody); err != nil {
 			log.Fatalf("Erro: %s", err)
 		}
+		return
+	}
+
+	var id = strconv.FormatUint(uint64(tema.ID), 10)
+
+	if !checkIfTemaExists(id) {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Tema Não Encontrado!")
 		return
 	}
 

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -114,22 +115,12 @@ func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 // @Success 400 {object} errorResponse
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
-// @Router /usuarios/atualizar/{id} [put]
+// @Router /usuarios/atualizar [put]
 func UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 
-	usuarioId := mux.Vars(r)["id"]
-
-	if !checkIfUsuarioExists(usuarioId) {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode("Usuario Não Encontrado!")
-		return
-	}
-
 	var usuario model.Usuario
-
-	database.Instance.First(&usuario, usuarioId)
 	json.NewDecoder(r.Body).Decode(&usuario)
-
+	
 	validate := validator.New()
 
 	err := validate.Struct(usuario)
@@ -144,6 +135,23 @@ func UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var id = strconv.FormatUint(uint64(usuario.ID), 10)
+	
+	if !checkIfUsuarioExists(id){
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Usuario não encontrado!")
+		return
+	}
+
+	var buscarUsuario model.Usuario
+	database.Instance.Where("usuario = ?", usuario.Usuario).Find(&buscarUsuario) 
+	
+	if checkIfUsuarioEmailExists(usuario.Usuario) && usuario.ID != buscarUsuario.ID{
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("Usuário já Cadastrado!")
+		return
+	}
+	
 	hash, _ := HashPassword(usuario.Senha)
 	usuario.Senha = hash
 

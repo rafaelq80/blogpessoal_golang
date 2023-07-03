@@ -141,20 +141,10 @@ func CreatePostagem(w http.ResponseWriter, r *http.Request) {
 // @Success 400 {object} errorResponse
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
-// @Router /postagens/{id} [put]
+// @Router /postagens [put]
 func UpdatePostagem(w http.ResponseWriter, r *http.Request) {
 
-	postagemId := mux.Vars(r)["id"]
-
-	if !checkIfPostagemExists(postagemId) {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode("Postagem Não Encontrada!")
-		return
-	}
-
 	var postagem model.Postagem
-
-	database.Instance.First(&postagem, postagemId)
 	json.NewDecoder(r.Body).Decode(&postagem)
 
 	validate := validator.New()
@@ -169,6 +159,14 @@ func UpdatePostagem(w http.ResponseWriter, r *http.Request) {
 		if err := json.NewEncoder(w).Encode(responseBody); err != nil {
 			log.Fatalf("Erro: %s", err)
 		}
+		return
+	}
+
+	var id = strconv.FormatUint(uint64(postagem.ID), 10)	
+
+	if !checkIfPostagemExists(id) {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Postagem Não Encontrada!")
 		return
 	}
 
