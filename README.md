@@ -85,3 +85,5 @@ Usuario --> Postagem
 <a href="https://github.com/go-playground/validator" target="_blank">Go Validator V10 - Validação de dados - Golang</a>
 
 <a href="https://github.com/swaggo/swag" target="_blank">Swag - Documentação com o Swagger 2.0 - Golang</a>
+
+<a href="https://github.com/golang-jwt/jwt-docs" target="_blank">Golang JWT - Autenticação com Token JWT - Versão 4.0 - Golang</a>
