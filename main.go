@@ -28,6 +28,9 @@ var DB *gorm.DB
 // @license.url https://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:8080
 // @BasePath /
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
 func main() {
 
 	// Load Configurations from config.json using Viper
@@ -79,5 +82,6 @@ func RegisterUsuarioRoutes(router *mux.Router) {
 }
 
 func RegisterSwaggerRoutes(router *mux.Router) {
-	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	router.PathPrefix("/").Handler(httpSwagger.WrapHandler)
+
 }

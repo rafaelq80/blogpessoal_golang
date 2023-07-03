@@ -21,6 +21,7 @@ import (
 // @Produce  json
 // @Success 200 {array} model.Usuario
 // @Router /usuarios [get]
+// @Security Bearer
 func GetUsuarios(w http.ResponseWriter, _ *http.Request) {
 
 	var usuarios []model.Usuario
@@ -43,6 +44,7 @@ func GetUsuarios(w http.ResponseWriter, _ *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /usuarios/{id} [get]
+// @Security Bearer
 func GetUsuarioById(w http.ResponseWriter, r *http.Request) {
 
 	usuarioId := mux.Vars(r)["id"]
@@ -116,6 +118,7 @@ func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /usuarios/atualizar [put]
+// @Security Bearer
 func UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 
 	var usuario model.Usuario

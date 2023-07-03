@@ -12,9 +12,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// type errorResponse struct {
-// 	Message    string
-// }
+type errorResponse struct {
+	Message    string
+}
 
 // getAll godoc
 // @Summary Listar Postagens
@@ -24,6 +24,7 @@ import (
 // @Produce  json
 // @Success 200 {array} model.Postagem
 // @Router /postagens [get]
+// @Security Bearer
 func GetPostagens(w http.ResponseWriter, _ *http.Request) {
 	var postagens []model.Postagem
 
@@ -45,6 +46,7 @@ func GetPostagens(w http.ResponseWriter, _ *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /postagens/{id} [get]
+// @Security Bearer
 func GetPostagemById(w http.ResponseWriter, r *http.Request) {
 
 	postagemId := mux.Vars(r)["id"]
@@ -74,6 +76,7 @@ func GetPostagemById(w http.ResponseWriter, r *http.Request) {
 // @Success 400 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /postagens/titulo/{titulo} [get]
+// @Security Bearer
 func GetPostagemByTitulo(w http.ResponseWriter, r *http.Request) {
 
 	postagemTitulo := mux.Vars(r)["titulo"]
@@ -95,6 +98,7 @@ func GetPostagemByTitulo(w http.ResponseWriter, r *http.Request) {
 // @Param postagem body model.Postagem true "Criar Postagem"
 // @Success 201 {object} model.Postagem
 // @Router /postagens [post]
+// @Security Bearer
 func CreatePostagem(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -142,6 +146,7 @@ func CreatePostagem(w http.ResponseWriter, r *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /postagens [put]
+// @Security Bearer
 func UpdatePostagem(w http.ResponseWriter, r *http.Request) {
 
 	var postagem model.Postagem
@@ -196,6 +201,7 @@ func UpdatePostagem(w http.ResponseWriter, r *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /postagens/{id} [delete]
+// @Security Bearer
 func DeletePostagem(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")

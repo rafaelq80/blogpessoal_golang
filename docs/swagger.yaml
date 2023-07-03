@@ -73,6 +73,21 @@ definitions:
     - senha
     - usuario
     type: object
+  model.UsuarioLogin:
+    properties:
+      foto:
+        type: string
+      id:
+        type: integer
+      nome:
+        type: string
+      senha:
+        type: string
+      token:
+        type: string
+      usuario:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -100,6 +115,8 @@ paths:
             items:
               $ref: '#/definitions/model.Postagem'
             type: array
+      security:
+      - Bearer: []
       summary: Listar Postagens
       tags:
       - postagens
@@ -121,74 +138,9 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/model.Postagem'
+      security:
+      - Bearer: []
       summary: Criar Postagem
-      tags:
-      - postagens
-  /postagens/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Apaga uma Postagem
-      parameters:
-      - description: Id da Postagem
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "405":
-          description: Method Not Allowed
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-      summary: Deletar Postagem
-      tags:
-      - postagens
-    get:
-      consumes:
-      - application/json
-      description: Lista uma Postagem por id
-      parameters:
-      - description: Id da Postagem
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.Postagem'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "405":
-          description: Method Not Allowed
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-      summary: Listar Postagem por id
       tags:
       - postagens
     put:
@@ -226,7 +178,80 @@ paths:
           description: Method Not Allowed
           schema:
             $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
       summary: Atualizar Postagem
+      tags:
+      - postagens
+  /postagens/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Apaga uma Postagem
+      parameters:
+      - description: Id da Postagem
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
+      summary: Deletar Postagem
+      tags:
+      - postagens
+    get:
+      consumes:
+      - application/json
+      description: Lista uma Postagem por id
+      parameters:
+      - description: Id da Postagem
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Postagem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
+      summary: Listar Postagem por id
       tags:
       - postagens
   /postagens/titulo/{titulo}:
@@ -257,6 +282,8 @@ paths:
           description: Method Not Allowed
           schema:
             $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
       summary: Listar Postagens por título
       tags:
       - postagens
@@ -274,6 +301,8 @@ paths:
             items:
               $ref: '#/definitions/model.Tema'
             type: array
+      security:
+      - Bearer: []
       summary: Listar Temas
       tags:
       - temas
@@ -295,74 +324,9 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/model.Tema'
+      security:
+      - Bearer: []
       summary: Criar Tema
-      tags:
-      - temas
-  /temas/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Apaga uma Tema
-      parameters:
-      - description: Id do Tema
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "405":
-          description: Method Not Allowed
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-      summary: Deletar Tema
-      tags:
-      - temas
-    get:
-      consumes:
-      - application/json
-      description: Lista um Tema por id
-      parameters:
-      - description: Id do Tema
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.Tema'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-        "405":
-          description: Method Not Allowed
-          schema:
-            $ref: '#/definitions/controllers.errorResponse'
-      summary: Listar Tema por id
       tags:
       - temas
     put:
@@ -400,7 +364,80 @@ paths:
           description: Method Not Allowed
           schema:
             $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
       summary: Atualizar Tema
+      tags:
+      - temas
+  /temas/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Apaga uma Tema
+      parameters:
+      - description: Id do Tema
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
+      summary: Deletar Tema
+      tags:
+      - temas
+    get:
+      consumes:
+      - application/json
+      description: Lista um Tema por id
+      parameters:
+      - description: Id do Tema
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Tema'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
+      summary: Listar Tema por id
       tags:
       - temas
   /temas/descricao/{descricao}:
@@ -431,6 +468,8 @@ paths:
           description: Method Not Allowed
           schema:
             $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
       summary: Listar Temas por descrição
       tags:
       - temas
@@ -448,6 +487,8 @@ paths:
             items:
               $ref: '#/definitions/model.Usuario'
             type: array
+      security:
+      - Bearer: []
       summary: Listar Usuarios
       tags:
       - usuarios
@@ -504,10 +545,12 @@ paths:
           description: Method Not Allowed
           schema:
             $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
       summary: Listar Usuario por id
       tags:
       - usuarios
-  /usuarios/atualizar/{id}:
+  /usuarios/atualizar:
     put:
       consumes:
       - application/json
@@ -543,7 +586,36 @@ paths:
           description: Method Not Allowed
           schema:
             $ref: '#/definitions/controllers.errorResponse'
+      security:
+      - Bearer: []
       summary: Atualizar Usuario
       tags:
       - usuarios
+  /usuarios/logar:
+    post:
+      consumes:
+      - application/json
+      description: Autentica um Usuario
+      parameters:
+      - description: Autenticar Usuario
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsuarioLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UsuarioLogin'
+      summary: Autenticar Usuario
+      tags:
+      - usuarios
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

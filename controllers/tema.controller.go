@@ -20,6 +20,7 @@ import (
 // @Produce  json
 // @Success 200 {array} model.Tema
 // @Router /temas [get]
+// @Security Bearer
 func GetTemas(w http.ResponseWriter, _ *http.Request) {
 
 	var temas []model.Tema
@@ -42,6 +43,7 @@ func GetTemas(w http.ResponseWriter, _ *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /temas/{id} [get]
+// @Security Bearer
 func GetTemaById(w http.ResponseWriter, r *http.Request) {
 
 	temaId := mux.Vars(r)["id"]
@@ -71,6 +73,7 @@ func GetTemaById(w http.ResponseWriter, r *http.Request) {
 // @Success 400 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /temas/descricao/{descricao} [get]
+// @Security Bearer
 func GetTemaByDescricao(w http.ResponseWriter, r *http.Request) {
 
 	temaDescricao := mux.Vars(r)["descricao"]
@@ -92,6 +95,7 @@ func GetTemaByDescricao(w http.ResponseWriter, r *http.Request) {
 // @Param tema body model.Tema true "Criar Tema"
 // @Success 201 {object} model.Tema
 // @Router /temas [post]
+// @Security Bearer
 func CreateTema(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var tema model.Tema
@@ -129,6 +133,7 @@ func CreateTema(w http.ResponseWriter, r *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /temas [put]
+// @Security Bearer
 func UpdateTema(w http.ResponseWriter, r *http.Request) {
 
 	var tema model.Tema
@@ -174,6 +179,7 @@ func UpdateTema(w http.ResponseWriter, r *http.Request) {
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /temas/{id} [delete]
+// @Security Bearer
 func DeleteTema(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	temaId := mux.Vars(r)["id"]
