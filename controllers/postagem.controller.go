@@ -12,9 +12,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type errorResponse struct {
-	Message    string
-}
+/* Descomentar as próximas 3 linhas
+   apenas ao atualizar o Swagger
+*/
+// type errorResponse struct {
+// 	Message    string
+// }
 
 // getAll godoc
 // @Summary Listar Postagens
@@ -167,7 +170,7 @@ func UpdatePostagem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var id = strconv.FormatUint(uint64(postagem.ID), 10)	
+	var id = strconv.FormatUint(uint64(postagem.ID), 10)
 
 	if !checkIfPostagemExists(id) {
 		w.WriteHeader(http.StatusNotFound)
