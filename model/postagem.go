@@ -1,4 +1,4 @@
-package entities
+package model
 
 import (
 	"time"
@@ -11,8 +11,10 @@ type Postagem struct {
 	UpdatedAt time.Time `gorm:"column:data;autoUpdateTime:mili" json:"data" example:"2022-04-09T21:21:46+00:00"`
 	TemaID    uint      `gorm:"column:tema_id;not null" json:"tema_id" validate:"required" example:"1"`
 	Tema      Tema      `gorm:"ForeignKey:TemaID;association_foreignkey:ID" json:"tema" validate:"-"`
+	UsuarioID uint      `gorm:"column:usuario_id;not null" json:"usuario_id" validate:"required" example:"1"`
+	Usuario   Usuario   `gorm:"ForeignKey:UsuarioID;association_foreignkey:ID" json:"usuario" validate:"-"`
 }
-
+ 
 func (Postagem) TableName() string {
 	return "tb_postagens"
 }

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"blogpessoal/entities"
+	"blogpessoal/model"
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -18,13 +18,12 @@ func Connect(connectionString string) {
 		panic("Não foi possível conectar ao banco de dados!")
 	}
 
-
 	log.Println("Conectando ao Banco de Dados...")
 }
 
 func Migrate() {
-	Instance.AutoMigrate(&entities.Postagem{})
-	Instance.AutoMigrate(&entities.Tema{})
-	Instance.AutoMigrate(&entities.Usuario{})
+	Instance.AutoMigrate(&model.Postagem{})
+	Instance.AutoMigrate(&model.Tema{})
+	Instance.AutoMigrate(&model.Usuario{})
 	log.Println("Criação das Tabelas Finalizada...")
 }

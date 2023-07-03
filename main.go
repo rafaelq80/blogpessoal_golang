@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blogpessoal/auth"
 	"blogpessoal/controllers"
 	"blogpessoal/database"
 	"fmt"
@@ -13,7 +14,6 @@ import (
 	_ "blogpessoal/docs"
 
 	httpSwagger "github.com/swaggo/http-swagger"
-
 )
 
 var DB *gorm.DB
@@ -53,31 +53,31 @@ func main() {
 }
 
 func RegisterPostagemRoutes(router *mux.Router) {
-	router.HandleFunc("/postagens", controllers.GetPostagens).Methods("GET")
-	router.HandleFunc("/postagens/{id}", controllers.GetPostagemById).Methods("GET")
-	router.HandleFunc("/postagens/titulo/{titulo}", controllers.GetPostagemByTitulo).Methods("GET")
-	router.HandleFunc("/postagens", controllers.CreatePostagem).Methods("POST")
-	router.HandleFunc("/postagens/{id}", controllers.UpdatePostagem).Methods("PUT")
-	router.HandleFunc("/postagens/{id}", controllers.DeletePostagem).Methods("DELETE")
+	router.HandleFunc("/postagens", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetPostagens))).Methods("GET")
+	router.HandleFunc("/postagens/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetPostagemById))).Methods("GET")
+	router.HandleFunc("/postagens/titulo/{titulo}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetPostagemByTitulo))).Methods("GET")
+	router.HandleFunc("/postagens", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.CreatePostagem))).Methods("POST")
+	router.HandleFunc("/postagens/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.UpdatePostagem))).Methods("PUT")
+	router.HandleFunc("/postagens/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.DeletePostagem))).Methods("DELETE")
 }
 
 func RegisterTemaRoutes(router *mux.Router) {
-	router.HandleFunc("/temas", controllers.GetTemas).Methods("GET")
-	router.HandleFunc("/temas", controllers.CreateTema).Methods("POST")
-	router.HandleFunc("/temas/{id}", controllers.GetTemaById).Methods("GET")
-	router.HandleFunc("/temas/descricao/{descricao}", controllers.GetTemaByDescricao).Methods("GET")
-	router.HandleFunc("/temas/{id}", controllers.UpdateTema).Methods("PUT")
-	router.HandleFunc("/temas/{id}", controllers.DeleteTema).Methods("DELETE")
+	router.HandleFunc("/temas", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetTemas))).Methods("GET")
+	router.HandleFunc("/temas", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.CreateTema))).Methods("POST")
+	router.HandleFunc("/temas/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetTemaById))).Methods("GET")
+	router.HandleFunc("/temas/descricao/{descricao}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetTemaByDescricao))).Methods("GET")
+	router.HandleFunc("/temas/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.UpdateTema))).Methods("PUT")
+	router.HandleFunc("/temas/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.DeleteTema))).Methods("DELETE")
 }
 
 func RegisterUsuarioRoutes(router *mux.Router) {
-	router.HandleFunc("/usuarios/all", controllers.GetUsuarios).Methods("GET")
-	router.HandleFunc("/usuarios/cadastrar", controllers.CreateUsuario).Methods("POST")
-	router.HandleFunc("/usuarios/{id}", controllers.GetUsuarioById).Methods("GET")
-	router.HandleFunc("/usuarios/atualizar/{id}", controllers.UpdateUsuario).Methods("PUT")
+	router.HandleFunc("/usuarios/all", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetUsuarios))).Methods("GET")
+	router.HandleFunc("/usuarios/cadastrar", auth.SetMiddlewareJSON(controllers.CreateUsuario)).Methods("POST")
+	router.HandleFunc("/usuarios/{id}", auth.SetMiddlewareJSON(auth.SetMiddlewareAuthentication(controllers.GetUsuarioById))).Methods("GET")
+	router.HandleFunc("/usuarios/atualizar/{id}", auth.SetMiddlewareJSON(controllers.UpdateUsuario)).Methods("PUT")
+	router.HandleFunc("/usuarios/logar", auth.SetMiddlewareJSON(controllers.Authetication)).Methods("POST")
 }
 
 func RegisterSwaggerRoutes(router *mux.Router) {
 	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 }
-

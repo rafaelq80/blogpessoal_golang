@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"blogpessoal/database"
-	"blogpessoal/entities"
+	"blogpessoal/model"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -17,11 +17,11 @@ import (
 // @Tags temas
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} entities.Tema
+// @Success 200 {array} model.Tema
 // @Router /temas [get]
-func GetTemas(w http.ResponseWriter, r *http.Request) {
+func GetTemas(w http.ResponseWriter, _ *http.Request) {
 
-	var temas []entities.Tema
+	var temas []model.Tema
 
 	database.Instance.Preload("Postagens").Find(&temas)
 	w.Header().Set("Content-Type", "application/json")
@@ -36,7 +36,7 @@ func GetTemas(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Id do Tema"
-// @Success 200 {array} entities.Tema
+// @Success 200 {array} model.Tema
 // @Success 400 {object} errorResponse
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
@@ -51,7 +51,7 @@ func GetTemaById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var tema entities.Tema
+	var tema model.Tema
 
 	database.Instance.Preload("Postagens").First(&tema, temaId)
 	w.Header().Set("Content-Type", "application/json")
@@ -66,7 +66,7 @@ func GetTemaById(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param descricao path string true "Descrição do Tema"
-// @Success 200 {array} entities.Tema
+// @Success 200 {array} model.Tema
 // @Success 400 {object} errorResponse
 // @Success 405 {object} errorResponse
 // @Router /temas/descricao/{descricao} [get]
@@ -74,7 +74,7 @@ func GetTemaByDescricao(w http.ResponseWriter, r *http.Request) {
 
 	temaDescricao := mux.Vars(r)["descricao"]
 
-	var temas []entities.Tema
+	var temas []model.Tema
 
 	database.Instance.Preload("Postagens").Where("descricao LIKE ?", "%"+temaDescricao+"%").Find(&temas)
 	w.Header().Set("Content-Type", "application/json")
@@ -88,12 +88,12 @@ func GetTemaByDescricao(w http.ResponseWriter, r *http.Request) {
 // @Tags temas
 // @Accept  json
 // @Produce  json
-// @Param tema body entities.Tema true "Criar Tema"
-// @Success 201 {object} entities.Tema
+// @Param tema body model.Tema true "Criar Tema"
+// @Success 201 {object} model.Tema
 // @Router /temas [post]
 func CreateTema(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var tema entities.Tema
+	var tema model.Tema
 	json.NewDecoder(r.Body).Decode(&tema)
 
 	validate := validator.New()
@@ -122,8 +122,8 @@ func CreateTema(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Id do tema"
-// @Param Tema body entities.Tema true "Atualizar Tema"
-// @Success 200 {object} entities.Tema
+// @Param Tema body model.Tema true "Atualizar Tema"
+// @Success 200 {object} model.Tema
 // @Success 400 {object} errorResponse
 // @Success 404 {object} errorResponse
 // @Success 405 {object} errorResponse
@@ -138,11 +138,11 @@ func UpdateTema(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var tema entities.Tema
+	var tema model.Tema
 
 	database.Instance.First(&tema, temaId)
 	json.NewDecoder(r.Body).Decode(&tema)
-	
+
 	validate := validator.New()
 
 	err := validate.Struct(tema)
@@ -185,7 +185,7 @@ func DeleteTema(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var tema entities.Tema
+	var tema model.Tema
 
 	database.Instance.Delete(&tema, temaId)
 	w.WriteHeader(http.StatusNoContent)
@@ -194,9 +194,9 @@ func DeleteTema(w http.ResponseWriter, r *http.Request) {
 
 func checkIfTemaExists(temaId string) bool {
 
-	var tema entities.Tema
+	var tema model.Tema
 	database.Instance.First(&tema, temaId)
 
-	return tema.ID != 0 
+	return tema.ID != 0
 
 }

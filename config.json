@@ -1,4 +1,5 @@
 {
     "connection_string": "root:root@tcp(127.0.0.1:3306)/db_blogpessoal_go?parseTime=true&charset=utf8mb4&loc=Local",
-    "port": 8080
+    "port": 8080,
+    "secret": "79cfb185cecc39db10aa7ed6490e6c7f4ef3c4bf8c10001b57bebb6566809c2a"
 }

@@ -5,7 +5,7 @@ definitions:
       message:
         type: string
     type: object
-  entities.Postagem:
+  model.Postagem:
     properties:
       data:
         example: "2022-04-09T21:21:46+00:00"
@@ -14,7 +14,7 @@ definitions:
         example: 1
         type: integer
       tema:
-        $ref: '#/definitions/entities.Tema'
+        $ref: '#/definitions/model.Tema'
       tema_id:
         example: 1
         type: integer
@@ -28,12 +28,18 @@ definitions:
         maxLength: 100
         minLength: 5
         type: string
+      usuario:
+        $ref: '#/definitions/model.Usuario'
+      usuario_id:
+        example: 1
+        type: integer
     required:
     - tema_id
     - texto
     - titulo
+    - usuario_id
     type: object
-  entities.Tema:
+  model.Tema:
     properties:
       descricao:
         type: string
@@ -41,10 +47,31 @@ definitions:
         type: integer
       postagens:
         items:
-          $ref: '#/definitions/entities.Postagem'
+          $ref: '#/definitions/model.Postagem'
         type: array
     required:
     - descricao
+    type: object
+  model.Usuario:
+    properties:
+      foto:
+        type: string
+      id:
+        type: integer
+      nome:
+        type: string
+      postagens:
+        items:
+          $ref: '#/definitions/model.Postagem'
+        type: array
+      senha:
+        type: string
+      usuario:
+        type: string
+    required:
+    - nome
+    - senha
+    - usuario
     type: object
 host: localhost:8080
 info:
@@ -71,7 +98,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Postagem'
+              $ref: '#/definitions/model.Postagem'
             type: array
       summary: Listar Postagens
       tags:
@@ -86,14 +113,14 @@ paths:
         name: postagem
         required: true
         schema:
-          $ref: '#/definitions/entities.Postagem'
+          $ref: '#/definitions/model.Postagem'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entities.Postagem'
+            $ref: '#/definitions/model.Postagem'
       summary: Criar Postagem
       tags:
       - postagens
@@ -147,7 +174,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Postagem'
+              $ref: '#/definitions/model.Postagem'
             type: array
         "400":
           description: Bad Request
@@ -179,14 +206,14 @@ paths:
         name: postagem
         required: true
         schema:
-          $ref: '#/definitions/entities.Postagem'
+          $ref: '#/definitions/model.Postagem'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Postagem'
+            $ref: '#/definitions/model.Postagem'
         "400":
           description: Bad Request
           schema:
@@ -220,7 +247,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Postagem'
+              $ref: '#/definitions/model.Postagem'
             type: array
         "400":
           description: Bad Request
@@ -245,7 +272,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Tema'
+              $ref: '#/definitions/model.Tema'
             type: array
       summary: Listar Temas
       tags:
@@ -260,14 +287,14 @@ paths:
         name: tema
         required: true
         schema:
-          $ref: '#/definitions/entities.Tema'
+          $ref: '#/definitions/model.Tema'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entities.Tema'
+            $ref: '#/definitions/model.Tema'
       summary: Criar Tema
       tags:
       - temas
@@ -321,7 +348,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Tema'
+              $ref: '#/definitions/model.Tema'
             type: array
         "400":
           description: Bad Request
@@ -353,14 +380,14 @@ paths:
         name: Tema
         required: true
         schema:
-          $ref: '#/definitions/entities.Tema'
+          $ref: '#/definitions/model.Tema'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Tema'
+            $ref: '#/definitions/model.Tema'
         "400":
           description: Bad Request
           schema:
@@ -394,7 +421,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Tema'
+              $ref: '#/definitions/model.Tema'
             type: array
         "400":
           description: Bad Request
@@ -407,4 +434,116 @@ paths:
       summary: Listar Temas por descrição
       tags:
       - temas
+  /usuarios:
+    get:
+      consumes:
+      - application/json
+      description: Lista todos os Usuarios
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Usuario'
+            type: array
+      summary: Listar Usuarios
+      tags:
+      - usuarios
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo Usuario
+      parameters:
+      - description: Criar Usuario
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/model.Usuario'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Usuario'
+      summary: Criar Usuario
+      tags:
+      - usuarios
+  /usuarios/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Lista um Usuario por id
+      parameters:
+      - description: Id do Usuario
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Usuario'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Listar Usuario por id
+      tags:
+      - usuarios
+  /usuarios/atualizar/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Edita um Usuario
+      parameters:
+      - description: Id do usuario
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Atualizar Usuario
+        in: body
+        name: Usuario
+        required: true
+        schema:
+          $ref: '#/definitions/model.Usuario'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Usuario'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Atualizar Usuario
+      tags:
+      - usuarios
 swagger: "2.0"

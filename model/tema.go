@@ -1,4 +1,4 @@
-package entities
+package model
 
 type Tema struct {
 	ID        uint       `gorm:"primary_key, AUTO_INCREMENT" json:"id,omitempty"`
